@@ -1,0 +1,11 @@
+# XAMPP/PHP/Web Project Gitignore
+/php/db.php
+/uploads/
+.DS_Store
+Thumbs.db
+*.log
+/tmp/
+.vscode/
+.idea/
+node_modules/
+package-lock.json

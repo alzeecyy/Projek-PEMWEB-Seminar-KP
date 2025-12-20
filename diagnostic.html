@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnostic Tool - SKP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .test-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .test-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .status.pending {
+            background: #ffc107;
+            color: #000;
+        }
+
+        .status.success {
+            background: #4caf50;
+            color: white;
+        }
+
+        .status.error {
+            background: #f44336;
+            color: white;
+        }
+
+        .result {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .info-box h3 {
+            color: #1976d2;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .info-box ol {
+            margin-left: 20px;
+            color: #333;
+        }
+
+        .info-box li {
+            margin-bottom: 8px;
+        }
+
+        .code {
+            background: #263238;
+            color: #aed581;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🔍SKP</h1>
+        <p class="subtitle">Alat diagnostik untuk mendeteksi masalah koneksi PHP dan database</p>
+
+        <!-- Test 1: Current URL -->
+        <div class="test-section">
+            <div class="test-title">1. Metode Akses URL</div>
+            <div class="status" id="status1">pending</div>
+            <div class="result" id="result1">Menunggu...</div>
+        </div>
+
+        <!-- Test 2: PHP Server -->
+        <div class="test-section">
+            <div class="test-title">2. Server PHP Status</div>
+            <div class="status" id="status2">pending</div>
+            <div class="result" id="result2">Menunggu...</div>
+            <button class="btn" onclick="testPHP()">Test PHP Server</button>
+        </div>
+
+        <!-- Test 3: Database Connection -->
+        <div class="test-section">
+            <div class="test-title">3. Koneksi Database</div>
+            <div class="status" id="status3">pending</div>
+            <div class="result" id="result3">Menunggu...</div>
+            <button class="btn" onclick="testDatabase()">Test Database</button>
+        </div>
+
+        <!-- Test 4: Auth Endpoint -->
+        <div class="test-section">
+            <div class="test-title">4. Endpoint Autentikasi</div>
+            <div class="status" id="status4">pending</div>
+            <div class="result" id="result4">Menunggu...</div>
+            <button class="btn" onclick="testAuth()">Test Auth Endpoint</button>
+        </div>
+
+        <!-- Instructions -->
+        <div class="info-box">
+            <h3>📋 Cara Memperbaiki Masalah:</h3>
+            <ol>
+                <li><strong>Pastikan XAMPP Apache Running:</strong>
+                    <ul>
+                        <li>Buka XAMPP Control Panel</li>
+                        <li>Klik "Start" pada Apache</li>
+                        <li>Tunggu hingga background jadi hijau</li>
+                    </ul>
+                </li>
+                <li><strong>Pastikan Database Exists:</strong>
+                    <ul>
+                        <li>Buka <a href="http://localhost/phpmyadmin" target="_blank">http://localhost/phpmyadmin</a>
+                        </li>
+                        <li>Cek ada database bernama "seminar_kp"</li>
+                        <li>Jika belum ada, import file <code>php/setup.sql</code></li>
+                    </ul>
+                </li>
+                <li><strong>Akses via localhost:</strong>
+                    <div class="code">http://localhost/SKP/diagnostic.html</div>
+                    BUKAN via file:/// atau C:\xampp\...
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        // Test 1: Check current URL
+        function checkURL() {
+            const url = window.location.href;
+            const status = document.getElementById('status1');
+            const result = document.getElementById('result1');
+
+            if (url.startsWith('http://localhost') || url.startsWith('http://127.0.0.1')) {
+                status.className = 'status success';
+                status.textContent = 'Success ✓';
+                result.textContent = '✅ Akses via localhost BENAR:\n' + url;
+            } else {
+                status.className = 'status error';
+                status.textContent = 'Error ✗';
+                result.textContent = '❌ MASALAH: Anda membuka file langsung!\n\n' +
+                    'URL Sekarang: ' + url + '\n\n' +
+                    'URL Yang Benar:\nhttp://localhost/SKP/diagnostic.html\n\n' +
+                    'SOLUSI:\n1. Buka browser\n2. Ketik: http://localhost/SKP/diagnostic.html\n3. Jangan buka file dari Windows Explorer!';
+            }
+        }
+
+        // Test 2: PHP Server
+        async function testPHP() {
+            const status = document.getElementById('status2');
+            const result = document.getElementById('result2');
+
+            status.className = 'status pending';
+            status.textContent = 'Testing...';
+            result.textContent = 'Menghubungi server PHP...';
+
+            try {
+                const response = await fetch('test_simple.php');
+                const text = await response.text();
+
+                status.className = 'status success';
+                status.textContent = 'Success ✓';
+                result.textContent = '✅ PHP Server BERFUNGSI!\n\nResponse:\n' + text;
+            } catch (err) {
+                status.className = 'status error';
+                status.textContent = 'Error ✗';
+                result.textContent = '❌ TIDAK BISA KONEKSI KE PHP!\n\n' +
+                    'Error: ' + err.message + '\n\n' +
+                    'SOLUSI:\n' +
+                    '1. Buka XAMPP Control Panel\n' +
+                    '2. Pastikan Apache berwarna HIJAU (Running)\n' +
+                    '3. Jika belum, klik "Start" pada Apache\n' +
+                    '4. Refresh halaman ini dan test lagi';
+            }
+        }
+
+        // Test 3: Database Connection
+        async function testDatabase() {
+            const status = document.getElementById('status3');
+            const result = document.getElementById('result3');
+
+            status.className = 'status pending';
+            status.textContent = 'Testing...';
+            result.textContent = 'Mengecek koneksi database...';
+
+            try {
+                const response = await fetch('php/test_connection.php');
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    status.className = 'status success';
+                    status.textContent = 'Success ✓';
+                    result.textContent = '✅ DATABASE TERHUBUNG!\n\n' + data.message;
+                } else {
+                    status.className = 'status error';
+                    status.textContent = 'Error ✗';
+                    result.textContent = '❌ DATABASE ERROR!\n\n' + data.message + '\n\n' +
+                        'SOLUSI:\n' +
+                        '1. Buka http://localhost/phpmyadmin\n' +
+                        '2. Buat database baru bernama: seminar_kp\n' +
+                        '3. Import file: php/setup.sql\n' +
+                        '4. Test lagi';
+                }
+            } catch (err) {
+                status.className = 'status error';
+                status.textContent = 'Error ✗';
+                result.textContent = '❌ TIDAK BISA TEST DATABASE!\n\n' +
+                    'Error: ' + err.message + '\n\n' +
+                    'Pastikan Apache sudah running terlebih dahulu.';
+            }
+        }
+
+        // Test 4: Auth Endpoint
+        async function testAuth() {
+            const status = document.getElementById('status4');
+            const result = document.getElementById('result4');
+
+            status.className = 'status pending';
+            status.textContent = 'Testing...';
+            result.textContent = 'Mengecek endpoint autentikasi...';
+
+            try {
+                const formData = new FormData();
+                formData.append('action', 'login');
+                formData.append('email', 'test@test.com');
+                formData.append('password', 'test123');
+
+                const response = await fetch('php/auth.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const text = await response.text();
+                console.log('Auth response:', text);
+
+                try {
+                    const data = JSON.parse(text);
+
+                    status.className = 'status success';
+                    status.textContent = 'Success ✓';
+                    result.textContent = '✅ ENDPOINT AUTH BERFUNGSI!\n\n' +
+                        'Response: ' + JSON.stringify(data, null, 2) + '\n\n' +
+                        '(Email tidak ditemukan adalah NORMAL jika belum register)';
+                } catch (parseErr) {
+                    status.className = 'status error';
+                    status.textContent = 'Error ✗';
+                    result.textContent = '❌ RESPONSE BUKAN JSON!\n\n' +
+                        'Raw Response:\n' + text.substring(0, 500);
+                }
+            } catch (err) {
+                status.className = 'status error';
+                status.textContent = 'Error ✗';
+                result.textContent = '❌ GAGAL KONEKSI KE AUTH.PHP!\n\n' +
+                    'Error: ' + err.message + '\n\n' +
+                    'Pastikan semua test di atas HIJAU terlebih dahulu.';
+            }
+        }
+
+        // Run URL check on load
+        window.addEventListener('load', checkURL);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Seminar - Seminar KP</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Global Black Body */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #000000;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* App Container - Light Blue Gradient Background as per image */
+        .app-container {
+            background: linear-gradient(180deg, #E0F2FE 0%, #EFF6FF 100%);
+            width: 100%;
+            max-width: 480px;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Header - Curved Dark Blue */
+        .detail-header {
+            background: #001E6C;
+            padding: 40px 20px 60px;
+            text-align: center;
+            border-radius: 0 0 50% 50% / 0 0 40px 40px;
+            position: relative;
+            z-index: 10;
+            overflow: hidden;
+        }
+
+        .detail-header::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 100px;
+            background: radial-gradient(circle, rgba(66, 133, 244, 0.8) 0%, rgba(0, 30, 108, 0) 70%);
+            filter: blur(20px);
+            z-index: -1;
+        }
+
+        .header-title {
+            color: white;
+            font-size: 18px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Status bar mock */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: white;
+        }
+
+        /* Back Link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: #001E6C;
+            font-weight: 700;
+            font-size: 14px;
+            text-decoration: none;
+            margin: 20px 24px 10px;
+            gap: 4px;
+        }
+
+        /* Main Content Card */
+        .main-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border: 2px solid #8B5CF6;
+            /* Purple/Blue border from image */
+            border-radius: 20px;
+            margin: 0 20px 20px;
+            padding: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .seminar-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .seminar-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: #001E6C;
+            text-transform: uppercase;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .seminar-speaker {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #64748B;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .info-box {
+            background: #3B82F6;
+            /* Blue Color */
+            padding: 12px;
+            border-radius: 12px;
+            color: white;
+        }
+
+        .info-label {
+            font-size: 10px;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .divider {
+            height: 1px;
+            background: #CBD5E1;
+            margin: 20px 0;
+        }
+
+        /* Summary Card (Dark Blue Box) */
+        .summary-card {
+            background: #001E6C;
+            border-radius: 16px;
+            padding: 20px;
+            color: white;
+        }
+
+        .summary-title {
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 1px;
+        }
+
+        .quota-label {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 4px;
+        }
+
+        .quota-value {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #3B82F6;
+            /* Lighter blue fill */
+            border-radius: 3px;
+            width: 75%;
+            /* Example width */
+        }
+
+        .action-btn {
+            width: 100%;
+            background: white;
+            color: #001E6C;
+            border: none;
+            padding: 12px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .action-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 200;
+            display: none;
+            align-items: flex-end;
+            /* Show from bottom */
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        /* Modal Card / Bottom Sheet */
+        .modal-card-pop {
+            background: linear-gradient(180deg, #FFFFFF 0%, #3B82F6 100%);
+            width: 100%;
+            max-width: 480px;
+            border-radius: 30px 30px 0 0;
+            padding: 0;
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Modal Header */
+        .modal-header {
+            background: #001E6C;
+            padding: 30px 20px 50px;
+            text-align: center;
+            border-radius: 0 0 50% 50% / 0 0 40px 40px;
+            margin-bottom: 20px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: white;
+            font-size: 18px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Modal Body Form */
+        .modal-body {
+            padding: 0 24px 30px;
+            flex: 1;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            color: #001E6C;
+            font-weight: 800;
+            font-size: 14px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #60A5FA;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            outline: none;
+            color: #001E6C;
+            font-weight: 600;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: #001E6C;
+        }
+
+        /* Radio Group Styling */
+        .radio-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .radio-label {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .radio-label input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .radio-custom {
+            display: inline-block;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #60A5FA;
+            border-radius: 8px;
+            color: #001E6C;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .radio-label input:checked~.radio-custom {
+            background: #001E6C;
+            color: white;
+            border-color: #001E6C;
+        }
+
+        .radio-label:hover .radio-custom {
+            border-color: #001E6C;
+        }
+
+        /* Checkbox & Agreement */
+        .form-check {
+            margin: 20px 0 30px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .form-check input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #001E6C;
+            margin-top: 2px;
+        }
+
+        .check-label-title {
+            color: #001E6C;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+            display: block;
+        }
+
+        .check-label-desc {
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            line-height: 1.4;
+            text-transform: uppercase;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            background: #000E36;
+            /* Darker blue for button */
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+
+        <!-- Header -->
+        <div class="detail-header">
+
+            <div class="header-title">Detail Seminar</div>
+        </div>
+
+        <!-- Back Link -->
+        <a href="explore.html" class="back-link">
+            <span class="material-icons-round" style="font-size: 16px;">arrow_back</span>
+            Kembali
+        </a>
+
+        <!-- Main Card -->
+        <div class="main-card">
+            <!-- Image -->
+            <img src="" id="detailImage" class="seminar-img" alt="Seminar">
+
+            <!-- Title -->
+            <h2 class="seminar-title" id="detailTitle">Loading...</h2>
+
+            <!-- Speaker -->
+            <div class="seminar-speaker">
+                <span class="material-icons-round" style="font-size: 16px;">person</span>
+                <span id="detailSpeaker">Loading...</span>
+            </div>
+            <div style="width: 100%; height: 1px; background: #000; margin-bottom: 15px;"></div>
+
+            <!-- Info Grid -->
+            <div class="info-grid">
+                <div class="info-box">
+                    <div class="info-label">TANGGAL</div>
+                    <div class="info-value" id="detailDate">-</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">WAKTU</div>
+                    <div class="info-value">09.00 - 11.00</div> <!-- Static for now -->
+                </div>
+                <div class="info-box">
+                    <div class="info-label">TEMPAT</div>
+                    <div class="info-value" id="detailLocation">-</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">PESERTA</div>
+                    <div class="info-value" id="detailParticipant">-</div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Summary Card -->
+            <div class="summary-card">
+                <h3 class="summary-title">RINGKASAN</h3>
+                <div class="quota-label">KUOTA PESERTA</div>
+                <div class="quota-value" id="detailQuotaText">-</div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="detailProgressBar" style="width: 0%;"></div>
+                </div>
+
+                <div id="actionButtonContainer">
+                    <button class="action-btn" onclick="checkLoginAndRegister()">Daftar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Modal (Hidden initially) -->
+    <!-- Registration Modal -->
+    <div class="modal-overlay" id="uploadModal">
+        <div class="modal-card-pop">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h3>Daftar Seminar</h3>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+
+                <!-- Nama -->
+                <div class="form-group">
+                    <label class="form-label">Nama</label>
+                    <input type="text" class="form-input" id="regNama" placeholder="">
+                </div>
+
+                <!-- NIM -->
+                <div class="form-group">
+                    <label class="form-label">NIM</label>
+                    <input type="text" class="form-input" id="regNim" placeholder="Contoh: H1X000000"
+                        oninput="this.value = this.value.toUpperCase()">
+                </div>
+
+                <!-- Angkatan -->
+                <div class="form-group">
+                    <label class="form-label">Angkatan</label>
+                    <div class="radio-group" id="groupAngkatan">
+                        <label class="radio-label">
+                            <input type="radio" name="angkatan" value="2023">
+                            <span class="radio-custom">2023</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="angkatan" value="2024">
+                            <span class="radio-custom">2024</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="angkatan" value="2025">
+                            <span class="radio-custom">2025</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Jurusan -->
+                <div class="form-group">
+                    <label class="form-label">Jurusan</label>
+                    <div class="radio-group" id="groupJurusan">
+                        <label class="radio-label">
+                            <input type="radio" name="jurusan" value="Informatika">
+                            <span class="radio-custom">Informatika</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="jurusan" value="Teknik Komputer">
+                            <span class="radio-custom">Teknik Komputer</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Agreement -->
+                <div class="form-check">
+                    <input type="checkbox" id="regAgreement">
+                    <div>
+                        <span class="check-label-title">Syarat dan Persetujuan</span>
+                        <span class="check-label-desc">Saya berkomitmen untuk mengikuti seminar yang saya daftar</span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <button class="submit-btn" onclick="submitRegistration()">Daftar</button>
+                <div style="text-align: center; margin-top: 15px;">
+                    <span onclick="closeModal()"
+                        style="color: rgba(255,255,255,0.8); font-size: 12px; font-weight: 600; cursor: pointer;">Batal</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <script src="js/main.js"></script>
+    <script src="js/seminar-data.js"></script> <!-- Load shared data -->
+    <script>
+        // Check login status on load & Load Seminar ID
+        window.addEventListener('DOMContentLoaded', () => {
+            const status = loadSeminarDetail();
+
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const btn = document.querySelector('#actionButtonContainer button');
+
+            if (status === 'FINISHED') {
+                btn.textContent = 'Selesai';
+                btn.disabled = true;
+                btn.style.backgroundColor = '#94a3b8'; // Greyout
+                btn.style.cursor = 'not-allowed';
+                btn.onclick = null;
+            } else if (status === 'FULL') {
+                btn.textContent = 'Kuota Penuh';
+                btn.disabled = true;
+                btn.style.backgroundColor = '#94a3b8'; // Greyout
+                btn.style.cursor = 'not-allowed';
+                btn.onclick = null;
+            } else {
+                if (isLoggedIn) {
+                    btn.textContent = 'Daftar Sekarang';
+                    btn.onclick = openModal;
+                } else {
+                    btn.textContent = 'Login untuk Daftar';
+                    btn.onclick = () => window.location.href = 'login.html';
+                }
+            }
+        });
+
+        async function loadSeminarDetail() {
+            // Get ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = parseInt(urlParams.get('id'));
+
+            if (!id) {
+                console.error("No ID provided");
+                window.location.href = 'explore.html';
+                return 'OPEN';
+            }
+
+            // Find data
+            const seminar = await getSeminarById(id);
+
+            if (!seminar) {
+                showModal("error", "Seminar Tidak Ditemukan", "Seminar yang Anda cari tidak tersedia.", () => {
+                    window.location.href = 'explore.html';
+                });
+                return 'OPEN';
+            }
+
+            // Populate UI
+            document.getElementById('detailImage').src = seminar.image || 'assets/default_seminar.jpg';
+            document.getElementById('detailTitle').textContent = seminar.title;
+            document.getElementById('detailSpeaker').textContent = seminar.speaker;
+
+            // Format Date
+            const displayDate = formatDisplayDate(seminar.date);
+            document.getElementById('detailDate').textContent = displayDate;
+            document.getElementById('detailLocation').textContent = seminar.location;
+
+            // Display Time Range
+            if (seminar.time_start && seminar.time_end) {
+                const formatTime = (t) => t.substring(0, 5).replace(':', '.');
+                const displayTime = `${formatTime(seminar.time_start)} - ${formatTime(seminar.time_end)}`;
+                document.querySelector('.info-box:nth-child(2) .info-value').textContent = displayTime;
+            }
+
+            // Hidden Inputs for Registration
+            // Since we don't have hidden inputs in the modal HTML shown previously, 
+            // we will just store the ID in a global var or similar if needed.
+            // But for now, just UI.
+
+            // Quota Logic
+            const quotaText = `${seminar.quotaCurrent}/${seminar.quotaMax}`;
+            document.getElementById('detailParticipant').textContent = quotaText;
+            document.getElementById('detailQuotaText').textContent = `${seminar.quotaCurrent} dari ${seminar.quotaMax}`;
+
+            // Progress Bar
+            const percentage = (seminar.quotaCurrent / seminar.quotaMax) * 100;
+            document.getElementById('detailProgressBar').style.width = `${percentage}%`;
+
+            // Status Logic
+            const now = new Date();
+            const seminarEnd = parseSeminarDate(seminar.date);
+            if (seminar.time_end) {
+                const [h, m] = seminar.time_end.split(':');
+                seminarEnd.setHours(parseInt(h), parseInt(m), 59);
+            } else {
+                seminarEnd.setHours(23, 59, 59);
+            }
+
+            let status = 'OPEN';
+            if (seminarEnd < now) status = 'FINISHED';
+            if (seminar.quotaCurrent >= seminar.quotaMax) status = 'FULL';
+
+            // Update Button State
+            const regBtn = document.querySelector('.action-btn');
+            if (status === 'FINISHED') {
+                regBtn.textContent = 'SEMINAR SELESAI';
+                regBtn.disabled = true;
+                regBtn.style.background = '#9CA3AF';
+                regBtn.style.color = 'white';
+            } else if (status === 'FULL') {
+                regBtn.textContent = 'KUOTA PENUH';
+                regBtn.disabled = true;
+                regBtn.style.background = '#EF4444'; // Red
+                regBtn.style.color = 'white';
+            } else {
+                regBtn.textContent = 'DAFTAR SEKARANG';
+                regBtn.disabled = false;
+                regBtn.style.background = 'white';
+                regBtn.style.color = '#001E6C';
+                regBtn.onclick = checkLoginAndRegister;
+            }
+
+            return status;
+        }
+
+        // Auto load on start
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSeminarDetail();
+        });
+
+        function checkLoginAndRegister() {
+            // Function logic handled by onload for simplicity of UI text update
+            // But double checking here
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            if (!isLoggedIn) {
+                showModal("warning", "Akses Dibatasi", "⛔ Anda belum login!\n\nSilakan login terlebih dahulu untuk mendaftar seminar.", () => {
+                    window.location.href = 'login.html';
+                });
+            } else {
+                openModal();
+            }
+        }
+
+        function openModal() {
+            document.getElementById('uploadModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('uploadModal').classList.remove('active');
+        }
+
+        function submitRegistration() {
+            // Correctly select the submit button in the modal
+            const btn = document.querySelector('.submit-btn');
+
+            const nama = document.getElementById('regNama').value;
+            const nim = document.getElementById('regNim').value;
+
+            // Get Radio Values
+            const angkatanEl = document.querySelector('input[name="angkatan"]:checked');
+            const angkatan = angkatanEl ? angkatanEl.value : null;
+
+            const jurusanEl = document.querySelector('input[name="jurusan"]:checked');
+            const jurusan = jurusanEl ? jurusanEl.value : null;
+
+            const agreement = document.getElementById('regAgreement').checked;
+
+            // Validation for Empty Fields
+            if (!nama || !nim || !angkatan || !jurusan) {
+                showModal("error", "Data Belum Lengkap", "Mohon lengkapi semua data diri (Nama, NIM, Angkatan, Jurusan).");
+                return;
+            }
+
+            // Validation for NIM
+            const nimPattern = /^(?=.*[A-Z])(?=.*\d)[A-Z0-9.]+$/;
+            if (!nimPattern.test(nim)) {
+                showModal("error", "Format NIM Salah", "Format NIM tidak valid. NIM harus kapital dan mengandung angka (Contoh: A11.2023.12345)");
+                return;
+            }
+
+            if (!agreement) {
+                showModal("error", "Persetujuan Diperlukan", "Anda harus menyetujui syarat dan ketentuan.");
+                return;
+            }
+
+            // Get Seminar ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const seminarId = parseInt(urlParams.get('id'));
+
+            // AJAX Submission Logic Refactored
+            // 1. Close the registration modal immediately to prevent UI conflicts
+            closeModal();
+
+            // 2. Show Global Loading Spinner
+            // Assuming toggleLoading(true) exists in main.js, otherwise valid fallback
+            if (typeof toggleLoading === 'function') {
+                toggleLoading(true);
+            } else {
+                // Fallback if main.js is cached/old
+                const loader = document.getElementById('globalLoading');
+                if (loader) loader.style.display = 'flex';
+            }
+
+            const formData = new FormData();
+            formData.append('seminar_id', seminarId);
+            formData.append('nama', nama);
+            formData.append('nim', nim);
+            formData.append('angkatan', angkatan);
+            formData.append('jurusan', jurusan);
+
+            // Safety Timeout to clear loading if server hangs indefinetely
+            const safetyTimer = setTimeout(() => {
+                if (typeof toggleLoading === 'function') toggleLoading(false);
+                else { const l = document.getElementById('globalLoading'); if (l) l.style.display = 'none'; }
+                showModal("error", "Request Timeout", "Server tidak merespon dalam waktu yang ditentukan.");
+            }, 10000); // 10s strict timeout
+
+            fetch('php/api_register_participant.php?t=' + Date.now(), {
+                method: 'POST',
+                body: formData
+            })
+                .then(async res => {
+                    clearTimeout(safetyTimer); // Clear safety timer
+
+                    const isJson = res.headers.get('content-type')?.includes('application/json');
+                    const text = await res.text();
+
+                    if (!res.ok) {
+                        return Promise.reject(text || res.statusText);
+                    }
+
+                    try {
+                        return JSON.parse(text);
+                    } catch (e) {
+                        console.error("Non-JSON Response:", text);
+                        return Promise.reject("Respon server tidak valid (Bukan JSON).");
+                    }
+                })
+                .then(data => {
+                    // Hide Loading
+                    if (typeof toggleLoading === 'function') toggleLoading(false);
+                    else { const l = document.getElementById('globalLoading'); if (l) l.style.display = 'none'; }
+
+                    if (data.status === 'success') {
+                        showModal("success", "Berhasil Mendaftar!", "Pendaftaran Anda berhasil. Kuota seminar telah diperbarui.", () => {
+                            window.location.reload();
+                        });
+                    } else {
+                        // Show error but re-open modal potentially? For now just error.
+                        showModal("error", "Pendaftaran Gagal", data.message || "Terjadi kesalahan yang tidak diketahui.");
+                    }
+                })
+                .catch(err => {
+                    clearTimeout(safetyTimer);
+                    // Hide Loading
+                    if (typeof toggleLoading === 'function') toggleLoading(false);
+                    else { const l = document.getElementById('globalLoading'); if (l) l.style.display = 'none'; }
+
+                    console.error(err);
+                    showModal("error", "Kesalahan Sistem", "Gagal memproses pendaftaran:\n" + (typeof err === 'string' ? err : "Koneksi bermasalah."));
+                });
+        }
+
+        // Custom Notification Functions
+    </script>
+</body>
+
+</html>

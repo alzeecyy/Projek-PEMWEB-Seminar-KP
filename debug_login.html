@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>DEBUG - Check Login Status</title>
+    <style>
+        body {
+            font-family: monospace;
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 20px;
+        }
+
+        .box {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 10px 0;
+            border: 2px solid #00ff00;
+        }
+
+        button {
+            background: #00ff00;
+            color: #000;
+            padding: 10px 20px;
+            border: none;
+            margin: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔍 DEBUG LOGIN STATUS</h1>
+
+    <div class="box">
+        <h2>LocalStorage Contents:</h2>
+        <div id="storage"></div>
+    </div>
+
+    <div class="box">
+        <h2>Actions:</h2>
+        <button onclick="setFakeLogin()">SET FAKE LOGIN (for testing)</button>
+        <button onclick="clearAll()">CLEAR ALL STORAGE</button>
+        <button onclick="location.reload()">REFRESH</button>
+    </div>
+
+    <div class="box">
+        <h2>Quick Links:</h2>
+        <a href="login.html" style="color:#00ffff;">Go to Login Page</a><br>
+        <a href="home.html" style="color:#00ffff;">Go to Home Page</a>
+    </div>
+
+    <script>
+        function displayStorage() {
+            const storage = document.getElementById('storage');
+            let html = '<table border="1" style="color:#00ff00;">';
+            html += '<tr><th>Key</th><th>Value</th></tr>';
+
+            if (localStorage.length === 0) {
+                html += '<tr><td colspan="2" style="color:#ff0000;">❌ KOSONG - Belum login!</td></tr>';
+            } else {
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    const value = localStorage.getItem(key);
+                    html += `<tr><td>${key}</td><td>${value}</td></tr>`;
+                }
+            }
+            html += '</table>';
+            storage.innerHTML = html;
+        }
+
+        function setFakeLogin() {
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('userName', 'Test User');
+            alert('✅ Fake login berhasil! Sekarang coba buka home.html');
+            displayStorage();
+        }
+
+        function clearAll() {
+            localStorage.clear();
+            alert('🗑️ Storage dihapus!');
+            displayStorage();
+        }
+
+        displayStorage();
+    </script>
+</body>
+
+</html>

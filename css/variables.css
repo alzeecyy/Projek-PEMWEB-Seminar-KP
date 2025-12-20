@@ -1,0 +1,36 @@
+:root {
+    /* Reference Palette */
+    --bg-gradient-start: #1E3A8A;
+    /* Dark Blue */
+    --bg-gradient-end: #FFFFFF;
+    /* Fades to white at bottom */
+
+    --card-border: rgba(255, 255, 255, 0.8);
+    --card-bg: rgba(255, 255, 255, 0.15);
+    /* Glassy feel */
+
+    --text-title: #FFFFFF;
+    --text-label: #1E3A8A;
+    /* Dark Blue/Black for labels inside/on card */
+
+    --input-bg: #BFDBFE;
+    /* Light Blue input background */
+    --input-border: #3B82F6;
+    /* Blue border */
+
+    --btn-bg: #111827;
+    /* Very Dark Blue/Black */
+    --btn-text: #FFFFFF;
+
+    /* Global Overrides */
+    --primary-color: #1E3A8A;
+    --font-family: 'Inter', system-ui, sans-serif;
+    /* Cleaning up font */
+
+    /* Spacing */
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --border-radius-card: 20px;
+    --border-radius-input: 8px;
+}

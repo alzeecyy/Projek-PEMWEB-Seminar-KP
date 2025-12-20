@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Seminar - Seminar KP</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #000000;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* Hide Scrollbar explicitly for this page */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        * {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .app-container {
+            background: linear-gradient(180deg, #FFFFFF 0%, #3B82F6 100%);
+            width: 100%;
+            max-width: 480px;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 40px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Header */
+        .page-header {
+            background: #001E6C;
+            padding: 40px 20px 60px;
+            text-align: center;
+            border-radius: 0 0 50% 50% / 0 0 40px 40px;
+            position: relative;
+            z-index: 10;
+            margin-bottom: 20px;
+            overflow: hidden;
+            /* Important for glow clip */
+        }
+
+        /* Glow Effect */
+        .page-header::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 100px;
+            background: radial-gradient(circle, rgba(66, 133, 244, 0.8) 0%, rgba(0, 30, 108, 0) 70%);
+            filter: blur(20px);
+            z-index: -1;
+        }
+
+        .header-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+            line-height: 1.3;
+        }
+
+        /* Back Link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: white;
+            position: absolute;
+            left: 20px;
+            top: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 20;
+        }
+
+        /* Form Container */
+        .form-container {
+            padding: 0 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            color: #001E6C;
+            font-weight: 800;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #60A5FA;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            outline: none;
+            color: #001E6C;
+            font-weight: 600;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+
+        .form-input:focus {
+            border-color: #001E6C;
+        }
+
+        /* Radio Group Styling */
+        .radio-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .radio-label {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .radio-label input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .radio-custom {
+            display: inline-block;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #60A5FA;
+            border-radius: 8px;
+            color: #001E6C;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .radio-label input:checked~.radio-custom {
+            background: #001E6C;
+            color: white;
+            border-color: #001E6C;
+        }
+
+        /* File Upload Styling */
+        .file-upload-box {
+            background: rgba(106, 163, 255, 0.1);
+            /* Light blue bg */
+            border: 2px dashed #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .file-upload-box:hover {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: #001E6C;
+        }
+
+        .file-upload-text {
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            pointer-events: none;
+        }
+
+        .file-input-hidden {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-name-display {
+            font-size: 11px;
+            color: #001E6C;
+            margin-top: 5px;
+            font-weight: 600;
+            display: none;
+            word-break: break-all;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            background: #000E36;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 16px;
+            font-weight: 800;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+
+        <!-- Header -->
+        <div class="page-header">
+            <a href="alur.html" class="back-link">
+                <span class="material-icons-round">arrow_back</span>
+            </a>
+
+            <div class="header-title">Daftar Sebagai<br>Penyeminar</div>
+        </div>
+
+        <!-- Form -->
+        <div class="form-container">
+
+            <!-- Nama -->
+            <div class="form-group">
+                <label class="form-label">Nama</label>
+                <input type="text" class="form-input" id="regNama">
+            </div>
+
+            <!-- NIM -->
+            <div class="form-group">
+                <label class="form-label">NIM</label>
+                <input type="text" class="form-input" id="regNim" placeholder="Contoh: H1X000000"
+                    oninput="this.value = this.value.toUpperCase()">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="text" class="form-input" id="regEmail">
+            </div>
+
+            <!-- Angkatan -->
+            <div class="form-group">
+                <label class="form-label">Angkatan</label>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="angkatan" value="2022">
+                        <span class="radio-custom">2022</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="angkatan" value="2023">
+                        <span class="radio-custom">2023</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Jurusan -->
+            <div class="form-group">
+                <label class="form-label">Jurusan</label>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="jurusan" value="Informatika">
+                        <span class="radio-custom">Informatika</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="jurusan" value="Teknik Komputer">
+                        <span class="radio-custom">Teknik Komputer</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Uploads -->
+            <div class="form-group">
+                <label class="form-label">Screenshot Jumlah Bimbingan</label>
+                <div class="file-upload-box">
+                    <span class="file-upload-text">Upload File</span>
+                    <input type="file" class="file-input-hidden" id="file1" onchange="updateFileName(this, 'disp1')">
+                    <div class="file-name-display" id="disp1"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Dokumen Seminar KP</label>
+                <div class="file-upload-box">
+                    <span class="file-upload-text">Upload File</span>
+                    <input type="file" class="file-input-hidden" id="file2" onchange="updateFileName(this, 'disp2')">
+                    <div class="file-name-display" id="disp2"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Foto Kertas Hijau Riwayat</label>
+                <div class="file-upload-box">
+                    <span class="file-upload-text">Upload File</span>
+                    <input type="file" class="file-input-hidden" id="file3" onchange="updateFileName(this, 'disp3')">
+                    <div class="file-name-display" id="disp3"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Screenshot Pengajuan Seminar</label>
+                <div class="file-upload-box">
+                    <span class="file-upload-text">Upload File</span>
+                    <input type="file" class="file-input-hidden" id="file4" onchange="updateFileName(this, 'disp4')">
+                    <div class="file-name-display" id="disp4"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Screenshot Peminjaman Ruangan</label>
+                <div class="file-upload-box">
+                    <span class="file-upload-text">Upload File</span>
+                    <input type="file" class="file-input-hidden" id="file5" onchange="updateFileName(this, 'disp5')">
+                    <div class="file-name-display" id="disp5"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Foto cover jadwal</label>
+                <div class="file-upload-box">
+                    <span class="file-upload-text">Upload File</span>
+                    <input type="file" class="file-input-hidden" id="file6" onchange="updateFileName(this, 'disp6')">
+                    <div class="file-name-display" id="disp6"></div>
+                </div>
+            </div>
+
+            <button class="submit-btn" onclick="submitForm()">Daftar</button>
+
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        function updateFileName(input, displayId) {
+            const display = document.getElementById(displayId);
+            if (input.files && input.files[0]) {
+                display.innerText = input.files[0].name;
+                display.style.display = 'block';
+            } else {
+                display.style.display = 'none';
+            }
+        }
+
+        function submitForm() {
+            const submitBtn = document.querySelector('.submit-btn');
+
+            // Collect Data
+            const nama = document.getElementById('regNama').value;
+            const nim = document.getElementById('regNim').value;
+            const email = document.getElementById('regEmail').value;
+
+            const angkatanEl = document.querySelector('input[name="angkatan"]:checked');
+            const jurusanEl = document.querySelector('input[name="jurusan"]:checked');
+
+            const f1 = document.getElementById('file1').files[0];
+            const f2 = document.getElementById('file2').files[0];
+            const f3 = document.getElementById('file3').files[0];
+            const f4 = document.getElementById('file4').files[0];
+            const f5 = document.getElementById('file5').files[0];
+            const f6 = document.getElementById('file6').files[0];
+
+            // Validation
+            if (!nama || !nim || !email || !angkatanEl || !jurusanEl) {
+                showModal("error", "Data Tidak Lengkap", "Mohon lengkapi data diri Anda:\n- Nama\n- NIM\n- Email\n- Angkatan\n- Jurusan");
+                return;
+            }
+
+            const nimPattern = /^(?=.*[A-Z])(?=.*\d)[A-Z0-9.]+$/;
+            if (!nimPattern.test(nim)) {
+                showModal("error", "Format NIM Salah", "NIM harus huruf KAPITAL dan mengandung angka.\nContoh: A11.2022.12345");
+                return;
+            }
+
+            if (!f1 || !f2 || !f3 || !f4 || !f5 || !f6) {
+                showModal("error", "Dokumen Kurang", "Mohon upload ke-6 dokumen wajib yang diminta.");
+                return;
+            }
+
+            // Size Warning (> 10MB Total)
+            const totalSize = (f1.size + f2.size + f3.size + f4.size + f5.size + f6.size) / (1024 * 1024);
+            if (totalSize > 10) {
+                showConfirm("File Besar (" + totalSize.toFixed(1) + " MB)",
+                    "Total ukuran file Anda cukup besar. Proses upload mungkin memakan waktu lebih lama dari biasanya.\n\nApakah Anda ingin melanjutkan?",
+                    () => { executeUpload(); }
+                );
+            } else {
+                executeUpload();
+            }
+
+            function executeUpload() {
+                // Prepare Data
+                const formData = new FormData();
+                formData.append('nama', nama);
+                formData.append('nim', nim);
+                formData.append('email', email);
+                formData.append('angkatan', angkatanEl.value);
+                formData.append('jurusan', jurusanEl.value);
+
+                formData.append('file1', f1);
+                formData.append('file2', f2);
+                formData.append('file3', f3);
+                formData.append('file4', f4);
+                formData.append('file5', f5);
+                formData.append('file6', f6);
+
+                // UI Loading State
+                submitBtn.innerText = "MENGUPLOAD...";
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = "0.7";
+
+                // AJAX Submission with Progress
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', 'php/api_register_seminar.php?t=' + Date.now(), true);
+
+                // Progress event
+                xhr.upload.onprogress = function (e) {
+                    if (e.lengthComputable) {
+                        const percentComplete = Math.round((e.loaded / e.total) * 100);
+                        if (percentComplete >= 100) {
+                            submitBtn.innerText = "MEMPROSES SERVER...";
+                        } else {
+                            submitBtn.innerText = `MENGUPLOAD... ${percentComplete}%`;
+                        }
+                    }
+                };
+
+                // Load completion
+                xhr.onload = function () {
+                    console.log('Server Status:', xhr.status);
+
+                    if (xhr.status !== 200) {
+                        showModal("error", "Server Error (" + xhr.status + ")", "Terjadi kesalahan server.\nResponse: " + xhr.responseText.substring(0, 100));
+                        resetButton();
+                        return;
+                    }
+
+                    try {
+                        const data = JSON.parse(xhr.responseText);
+                        if (data.status === 'success') {
+                            showModal("success", "Pendaftaran Berhasil!", "Data Anda telah dikirim!\nSilakan tunggu verifikasi admin di halaman Status.", () => {
+                                window.location.href = 'alur.html';
+                            });
+                        } else {
+                            showModal("error", "Gagal Mengirim", data.message || "Terjadi kesalahan server.");
+                            resetButton();
+                        }
+                    } catch (e) {
+                        console.error('JSON Parse Error:', e);
+                        showModal("error", "Format Response Salah", "Server error (Not JSON).\n\n" + xhr.responseText.substring(0, 100));
+                        resetButton();
+                    }
+                };
+
+                // Error handling
+                xhr.onerror = function () {
+                    console.error('Network Error');
+                    showModal("error", "Koneksi Error", "Gagal menghubungi server. Cek koneksi internet Anda.");
+                    resetButton();
+                };
+
+                // Send
+                xhr.send(formData);
+            }
+
+            function resetButton() {
+                submitBtn.innerText = "DAFTAR";
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = "1";
+            }
+        }
+    </script>
+</body>
+
+</html>

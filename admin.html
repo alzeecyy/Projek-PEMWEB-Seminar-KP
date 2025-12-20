@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - SKP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #001E6C;
+            --secondary: #2563EB;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --bg: #F3F4F6;
+            --sidebar-width: 260px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--primary);
+            color: white;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            z-index: 1000;
+            /* Increased */
+            pointer-events: auto;
+            /* Explicit */
+        }
+
+        .sidebar-brand {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-menu {
+            list-style: none;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: var(--secondary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            padding: 32px;
+            width: calc(100% - var(--sidebar-width));
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: #1F2937;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 24px;
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 12px 16px;
+            background: #F9FAFB;
+            color: #6B7280;
+            font-weight: 600;
+            font-size: 14px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid #E5E7EB;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .status-active {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .status-pending {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .status-full {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #E5E7EB;
+            color: #374151;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary);
+        }
+
+        /* Tabs */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 32px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .doc-link {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: #f3f4f6;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #374151;
+        }
+
+        /* Debug Logger */
+        #debugLogger {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            width: 300px;
+            max-height: 200px;
+            background: #000;
+            color: #0f0;
+            font-family: monospace;
+            font-size: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            opacity: 0.8;
+            overflow-y: auto;
+            z-index: 2000;
+            pointer-events: none;
+        }
+
+        /* --- Global Custom Modal (for Alerts) --- */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid #3B82F6;
+            border-right: 4px solid #60a5fa;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .loading-text {
+            margin-top: 20px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        .global-modal-content {
+            background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 24px;
+            padding: 32px;
+            max-width: 380px;
+            width: 85%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            animation: slideUp 0.3s ease-out;
+            position: relative;
+        }
+
+        .modal-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: white;
+            box-shadow: 0 8px 24px rgba(34, 197, 94, 0.4);
+        }
+
+        .modal-icon.error {
+            background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
+        }
+
+        .modal-icon.warning {
+            background: linear-gradient(135deg, #fcd34d 0%, #f59e0b 100%);
+            box-shadow: 0 8px 24px rgba(245, 158, 11, 0.4);
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .modal-message {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.5;
+            margin-bottom: 24px;
+            white-space: pre-line;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            flex: 1;
+            transition: transform 0.2s;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .modal-btn.secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <span class="material-icons-round">analytics</span>
+            <span>ADMIN SKP</span>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item active" data-tab="dashboard">
+                <span class="material-icons-round">dashboard</span>
+                <span>Dashboard</span>
+            </li>
+            <div class="nav-item" data-tab="all-seminars" onclick="app.switchTab('all-seminars', event)">
+                <span class="material-icons-round">list_alt</span>
+                <span>Daftar Seminar</span>
+            </div>
+            <li class="nav-item" data-tab="proposals">
+                <span class="material-icons-round">assignment_late</span>
+                <span>Pengajuan Masuk</span>
+            </li>
+            <li class="nav-item" data-tab="verification">
+                <span class="material-icons-round">fact_check</span>
+                <span>Verifikasi Kehadiran</span>
+            </li>
+            <li class="nav-item" data-tab="users">
+                <span class="material-icons-round">people</span>
+                <span>User Management</span>
+            </li>
+        </ul>
+        <div class="nav-item" id="btnLogout" style="margin-top: auto; color: #FCA5A5;">
+            <span class="material-icons-round">logout</span>
+            <span>Keluar</span>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="main-content">
+        <div class="header">
+            <h1 id="tabTitle">Dashboard</h1>
+            <div id="userInfo">Selamat Datang, <strong>Admin</strong></div>
+        </div>
+
+        <!-- DASHBOARD TAB -->
+        <div id="tab-dashboard" class="tab-content active">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 32px;">
+                <div class="card" style="border-left: 4px solid var(--secondary);">
+                    <div style="color: #6B7280; font-size: 14px;">Total Seminar</div>
+                    <div style="font-size: 28px; font-weight: 700;" id="statTotal">0</div>
+                </div>
+                <div class="card" style="border-left: 4px solid var(--warning);">
+                    <div style="color: #6B7280; font-size: 14px;">Pengajuan Pending</div>
+                    <div style="font-size: 28px; font-weight: 700;" id="statPending">0</div>
+                </div>
+                <div class="card" style="border-left: 4px solid var(--success);">
+                    <div style="color: #6B7280; font-size: 14px;">Total User</div>
+                    <div style="font-size: 28px; font-weight: 700;" id="statUsers">0</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 style="font-size: 18px; margin-bottom: 16px;">Pengisian Log Aktivitas</h2>
+                <div style="color: #6B7280;">Halaman Panel Admin versi Desktop. Silakan kelola jadwal dan verifikasi
+                    dokumen melalui sidebar kiri.</div>
+                <button class="btn btn-primary" style="margin-top: 20px" onclick="app.init()">Refresh Data</button>
+            </div>
+        </div>
+
+        <!-- ALL SEMINARS TAB -->
+        <div id="tab-all-seminars" class="tab-content">
+            <div class="card">
+                <div class="table-container">
+                    <table id="tblSeminars">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Judul</th>
+                                <th>Speaker</th>
+                                <th>Tanggal</th>
+                                <th>Kuota</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- PROPOSALS TAB -->
+        <div id="tab-proposals" class="tab-content">
+            <div class="card">
+                <div class="table-container">
+                    <table id="tblProposals">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nama Pengaju</th>
+                                <th>Tanggal Submit</th>
+                                <th>Dokumen</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- USERS TAB -->
+        <div id="tab-users" class="tab-content">
+            <div class="card">
+                <div class="table-container">
+                    <table id="tblUsers">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nama</th>
+                                <th>Email</th>
+                                <th>NIM</th>
+                                <th>Role</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ATTENDANCE VERIFICATION TAB -->
+        <div id="tab-verification" class="tab-content">
+            <div class="card">
+                <div class="table-container">
+                    <table id="tblVerification">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nama Peserta</th>
+                                <th>Seminar</th>
+                                <th>Bukti</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODALS -->
+    <div id="docModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Verifikasi Dokumen</h2>
+                <span class="material-icons-round" style="cursor: pointer;"
+                    onclick="app.closeModal('docModal')">close</span>
+            </div>
+            <div id="docList"></div>
+        </div>
+    </div>
+
+    <div id="approveModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Konfirmasi & Aktifkan</h2>
+                <span class="material-icons-round" style="cursor: pointer;"
+                    onclick="app.closeModal('approveModal')">close</span>
+            </div>
+            <form id="formApprove" enctype="multipart/form-data">
+                <input type="hidden" name="id" id="approveId">
+                <div class="form-group">
+                    <label class="form-label">Judul Resmi</label>
+                    <input type="text" name="title" id="approveTitle" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Pembicara (Mahasiswa)</label>
+                    <input type="text" name="speaker" id="approveSpeaker" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Foto Seminar</label>
+                    <input type="file" name="image" class="form-control" accept="image/*">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group">
+                        <label class="form-label">Tanggal Pelaksanaan</label>
+                        <input type="date" name="date" id="approveDate" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Lokasi/Ruangan</label>
+                        <input type="text" name="location" id="approveLoc" class="form-control" required
+                            placeholder="Gedung F 101">
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group">
+                        <label class="form-label">Waktu Mulai</label>
+                        <input type="time" name="time_start" id="approveTimeStart" class="form-control" required
+                            value="09:00">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Waktu Selesai</label>
+                        <input type="time" name="time_end" id="approveTimeEnd" class="form-control" required
+                            value="11:00">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Dosen Pembimbing</label>
+                    <input type="text" name="dosen" id="approveDosen" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Kuota Maksimal</label>
+                    <input type="number" name="quota_max" id="approveQuota" class="form-control" value="20">
+                </div>
+                <button type="submit" class="btn btn-success" style="width: 100%; padding: 12px; margin-top: 10px;">ACC
+                    & Aktifkan</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Jadwal Seminar</h2>
+                <span class="material-icons-round" style="cursor: pointer;"
+                    onclick="app.closeModal('editModal')">close</span>
+            </div>
+            <form id="formEditSeminar" enctype="multipart/form-data">
+                <input type="hidden" name="id" id="editId">
+                <div class="form-group">
+                    <label class="form-label">Judul Seminar</label>
+                    <input type="text" name="title" id="editTitle" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Pembicara (Mahasiswa)</label>
+                    <input type="text" name="speaker" id="editSpeaker" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Dosen Pembimbing</label>
+                    <input type="text" name="dosen" id="editDosen" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Ganti Foto (Opsional)</label>
+                    <input type="file" name="image" class="form-control" accept="image/*">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group">
+                        <label class="form-label">Tanggal</label>
+                        <input type="date" name="date" id="editDate" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Lokasi/Ruangan</label>
+                        <input type="text" name="location" id="editLoc" class="form-control" required>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group">
+                        <label class="form-label">Waktu Mulai</label>
+                        <input type="time" name="time_start" id="editTimeStart" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Waktu Selesai</label>
+                        <input type="time" name="time_end" id="editTimeEnd" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Kuota Maksimal</label>
+                    <input type="number" name="quota_max" id="editQuota" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary"
+                    style="width: 100%; padding: 12px; margin-top: 10px;">Simpan Perubahan</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Use a window-scoped object to ensure accessibility from everywhere
+        window.app = {
+            log: function (msg) {
+                const logger = document.getElementById('debugLogger');
+                if (logger) {
+                    logger.innerHTML += '<br>> ' + msg;
+                    logger.scrollTop = logger.scrollHeight;
+                }
+                console.log('[SKP-ADMIN]', msg);
+            },
+
+            init: async function () {
+                this.log('Initializing Admin UI...');
+
+                // Add Global Click Listener for Debugging
+                document.addEventListener('click', (e) => {
+                    const tag = e.target.tagName;
+                    const id = e.target.id || 'no-id';
+                    const cls = e.target.className || 'no-class';
+                    console.log(`[CLICK DEBUG] Tag: ${tag}, ID: ${id}, Class: ${cls}`);
+                }, true);
+
+                // Add Event Listeners for Nav Items
+                document.querySelectorAll('.nav-item[data-tab]').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        const tabId = item.getAttribute('data-tab');
+                        this.switchTab(tabId, e);
+                    });
+                });
+
+                // Add Event Listener for Logout
+                const btnLogout = document.getElementById('btnLogout');
+                if (btnLogout) {
+                    btnLogout.addEventListener('click', () => this.logout());
+                }
+
+                this.log('Checking access...');
+                await this.checkAccess();
+                this.log('Loading initial data...');
+                await Promise.all([
+                    this.loadSeminars(),
+                    this.loadUsers(),
+                    this.loadVerification()
+                ]);
+                this.setupForms();
+                this.log('Admin UI Ready.');
+            },
+
+            checkAccess: async function () {
+                try {
+                    const res = await fetch('php/get_profile.php');
+                    const data = await res.json();
+                    if (data.status !== 'success' || data.data.role !== 'admin') {
+                        this.log('Access denied. Redirecting...');
+                        window.location.href = 'home.html';
+                    } else {
+                        const userInfo = document.getElementById('userInfo');
+                        if (userInfo) userInfo.innerHTML = `Selamat Datang, <strong>${data.data.name}</strong>`;
+                    }
+                } catch (e) {
+                    this.log('Access check failed: ' + e.message);
+                }
+            },
+
+            switchTab: function (tabId, event) {
+                this.log('Switching to tab: ' + tabId);
+
+                // Content display
+                document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+                const target = document.getElementById('tab-' + tabId);
+                if (target) {
+                    target.classList.add('active');
+                } else {
+                    this.log('Error: Target tab not found: ' + tabId);
+                }
+
+                // Nav highlighting
+                document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+                const navItem = document.querySelector(`.nav-item[data-tab="${tabId}"]`);
+                if (navItem) navItem.classList.add('active');
+
+                // Title update
+                const titleMap = {
+                    'dashboard': 'Dashboard',
+                    'all-seminars': 'Daftar Seminar',
+                    'add-seminar': 'Tambah Jadwal',
+                    'proposals': 'Pengajuan Masuk',
+                    'verification': 'Verifikasi Kehadiran',
+                    'users': 'User Management'
+                };
+                const tabTitle = document.getElementById('tabTitle');
+                if (tabTitle) tabTitle.innerText = titleMap[tabId] || 'Admin Panel';
+
+                // Data refresh on tab switch
+                if (tabId === 'all-seminars' || tabId === 'proposals') this.loadSeminars();
+                if (tabId === 'verification') this.loadVerification();
+                if (tabId === 'users') this.loadUsers();
+            },
+
+            loadSeminars: async function () {
+                try {
+                    const res = await fetch('php/get_all_seminars.php');
+                    const text = await res.text();
+                    const result = JSON.parse(text);
+                    if (result.status !== 'success') throw new Error(result.message);
+
+                    const seminars = result.data;
+                    const tblBody = document.querySelector('#tblSeminars tbody');
+                    const propBody = document.querySelector('#tblProposals tbody');
+                    if (tblBody) tblBody.innerHTML = '';
+                    if (propBody) propBody.innerHTML = '';
+
+                    let total = 0, pending = 0;
+
+                    seminars.forEach(s => {
+                        total++;
+                        if (s.status === 'pending') {
+                            pending++;
+                            let docCount = 0;
+                            try { if (s.documents) docCount = Object.keys(JSON.parse(s.documents)).length; } catch (e) { }
+
+                            const tr = document.createElement('tr');
+                            const safeDocs = (s.documents || '{}').replace(/"/g, '&quot;');
+                            tr.innerHTML = `
+                                <td>${s.id}</td>
+                                <td>${s.speaker}</td>
+                                <td>${s.date}</td>
+                                <td><button class="btn btn-outline" data-docs="${safeDocs}" onclick="app.viewDocs(this)">Lihat (${docCount})</button></td>
+                                <td>
+                                    <div style="display:flex; gap:8px;">
+                                        <button class="btn btn-success" onclick="app.openApproveModal(${s.id}, \`${(s.title || '').replace(/`/g, "\\`").replace(/"/g, "&quot;")}\`, \`${(s.speaker || '').replace(/`/g, "\\`").replace(/"/g, "&quot;")}\`, ${s.quota_max})">ACC</button>
+                                        <button class="btn btn-danger" onclick="app.rejectProposal(${s.id})">Tolak</button>
+                                    </div>
+                                </td>
+                            `;
+                            if (propBody) propBody.appendChild(tr);
+                        } else {
+                            const tr = document.createElement('tr');
+                            // Store seminar data in data-json for easy editing
+                            const seminarData = JSON.stringify(s).replace(/"/g, '&quot;');
+                            tr.innerHTML = `
+                                <td>${s.id}</td>
+                                <td><div style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${s.title}</div></td>
+                                <td>${s.speaker}</td>
+                                <td>${s.date} <br> <span style="font-size:11px; color:#6B7280;">
+                                    ${s.time_start ? s.time_start.substring(0, 5) : '--:--'} - ${s.time_end ? s.time_end.substring(0, 5) : '--:--'}
+                                </span></td>
+                                <td>${s.quota_current}/${s.quota_max}</td>
+                                <td><span class="status-badge status-${s.status}">${s.status}</span></td>
+                                <td>
+                                    <div style="display:flex; gap:4px;">
+                                        <button class="btn btn-primary" style="padding:4px 8px;" data-json="${seminarData}" onclick="app.openEditModal(this)">Edit</button>
+                                        <button class="btn btn-danger" style="padding:4px 8px;" onclick="app.deleteSeminar(${s.id})">Del</button>
+                                    </div>
+                                </td>
+                            `;
+                            if (tblBody) tblBody.appendChild(tr);
+                        }
+                    });
+
+                    if (document.getElementById('statTotal')) document.getElementById('statTotal').innerText = total;
+                    if (document.getElementById('statPending')) document.getElementById('statPending').innerText = pending;
+                } catch (e) {
+                    this.log('Error Load Seminars: ' + e.message);
+                }
+            },
+
+            loadUsers: async function () {
+                try {
+                    const res = await fetch('php/get_all_users.php');
+                    const result = await res.json();
+                    if (result.status !== 'success') return;
+                    const users = result.data;
+                    const tbody = document.querySelector('#tblUsers tbody');
+                    if (tbody) {
+                        tbody.innerHTML = '';
+                        users.forEach(u => {
+                            tbody.innerHTML += `<tr><td>${u.id}</td><td>${u.name}</td><td>${u.email}</td><td>${u.nim || '-'}</td><td>${u.role}</td></tr>`;
+                        });
+                    }
+                    if (document.getElementById('statUsers')) document.getElementById('statUsers').innerText = users.length;
+                } catch (e) { this.log('Error Load Users: ' + e.message); }
+            },
+
+            loadVerification: async function () {
+                try {
+                    const res = await fetch('php/api_admin_get_pending_attendance.php');
+                    const result = await res.json();
+                    if (result.status !== 'success') return;
+
+                    const list = result.data;
+                    const tbody = document.querySelector('#tblVerification tbody');
+                    if (tbody) {
+                        tbody.innerHTML = '';
+                        list.forEach(item => {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                                <td>${item.id}</td>
+                                <td>${item.user_name}</td>
+                                <td>${item.seminar_name}</td>
+                                <td><a href="${item.proof_file}" target="_blank" class="btn btn-outline" style="font-size:12px; padding:4px 8px;">Lihat Foto</a></td>
+                                <td>
+                                    <button class="btn btn-success" onclick="app.verifyAttendance(${item.id}, 'approve')">ACC</button>
+                                    <button class="btn btn-danger" onclick="app.verifyAttendance(${item.id}, 'reject')">Tolak</button>
+                                </td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+                    }
+                } catch (e) { this.log('Error Load Verification: ' + e.message); }
+            },
+
+            verifyAttendance: function (id, action) {
+                showConfirm(
+                    'Konfirmasi',
+                    `Apakah Anda yakin ingin ${action === 'approve' ? 'menyetujui' : 'menolak'} bukti ini?`,
+                    async () => {
+                        try {
+                            const formData = new FormData();
+                            formData.append('id', id);
+                            formData.append('action', action);
+                            const res = await fetch('php/api_admin_verify_attendance.php', { method: 'POST', body: formData });
+                            const data = await res.json();
+                            if (data.status === 'success') {
+                                showModal('success', 'Berhasil', data.message);
+                                this.loadVerification();
+                            } else {
+                                showModal('error', 'Gagal', data.message);
+                            }
+                        } catch (e) { showModal('error', 'Error', 'Terjadi kesalahan: ' + e.message); }
+                    }
+                );
+            },
+
+            setupForms: function () {
+                const addForm = document.getElementById('formAddSeminar');
+                if (addForm) {
+                    addForm.onsubmit = async (e) => {
+                        e.preventDefault();
+                        const formData = new FormData(addForm);
+                        const res = await fetch('php/api_admin_add_seminar.php', { method: 'POST', body: formData });
+                        const data = await res.json();
+                        if (data.status === 'success') {
+                            showModal('success', 'Berhasil', data.message);
+                            addForm.reset();
+                            this.loadSeminars();
+                        } else {
+                            showModal('error', 'Gagal', data.message);
+                        }
+                    };
+                }
+
+                const appForm = document.getElementById('formApprove');
+                if (appForm) {
+                    appForm.onsubmit = async (e) => {
+                        e.preventDefault();
+                        const formData = new FormData(appForm);
+                        const res = await fetch('php/api_admin_approve_proposal.php', { method: 'POST', body: formData });
+                        const data = await res.json();
+                        if (data.status === 'success') {
+                            showModal('success', 'Proposal Disetujui', data.message);
+                            this.closeModal('approveModal');
+                            this.loadSeminars();
+                        } else {
+                            showModal('error', 'Gagal', data.message);
+                        }
+                    };
+                }
+
+                // Edit Seminar Form
+                const editForm = document.getElementById('formEditSeminar');
+                if (editForm) {
+                    editForm.onsubmit = async (e) => {
+                        e.preventDefault();
+                        const formData = new FormData(editForm);
+                        const res = await fetch('php/api_admin_edit_seminar.php', { method: 'POST', body: formData });
+                        const data = await res.json();
+                        if (data.status === 'success') {
+                            showModal('success', 'Perubahan Disimpan', data.message);
+                            this.closeModal('editModal');
+                            this.loadSeminars();
+                        } else {
+                            showModal('error', 'Gagal', data.message);
+                        }
+                    };
+                }
+            },
+
+            openEditModal: function (btn) {
+                const data = JSON.parse(btn.getAttribute('data-json'));
+                document.getElementById('editId').value = data.id;
+                document.getElementById('editTitle').value = data.title;
+                document.getElementById('editSpeaker').value = data.speaker;
+                document.getElementById('editDosen').value = data.dosen || '';
+                document.getElementById('editDate').value = data.date;
+                document.getElementById('editTimeStart').value = data.time_start || '09:00';
+                document.getElementById('editTimeEnd').value = data.time_end || '11:00';
+                document.getElementById('editLoc').value = data.location || '';
+                document.getElementById('editQuota').value = data.quota_max;
+                document.getElementById('editModal').style.display = 'block';
+            },
+
+            viewDocs: function (el) {
+                try {
+                    const docsJson = el.getAttribute('data-docs');
+                    if (!docsJson) throw new Error('No document data found');
+                    const docs = JSON.parse(docsJson);
+                    const list = document.getElementById('docList');
+                    list.innerHTML = '';
+                    const labels = { file1: 'Bimbingan', file2: 'Dokumen CP', file3: 'Kertas Hijau', file4: 'Pengajuan', file5: 'Ruangan', file6: 'Foto Cover' };
+                    Object.keys(docs).forEach(k => {
+                        list.innerHTML += `<a href="${docs[k]}" target="_blank" class="doc-link"><span class="material-icons-round" style="margin-right:10px;">description</span> ${labels[k] || k}</a>`;
+                    });
+                    if (Object.keys(docs).length === 0) list.innerHTML = 'Tidak ada dokumen.';
+                    document.getElementById('docModal').style.display = 'block';
+                } catch (e) { showModal('error', 'Gagal', 'Gagal memuat dokumen: ' + e.message); }
+            },
+
+            openApproveModal: function (id, title, speaker, quota_max) {
+                document.getElementById('approveId').value = id;
+                document.getElementById('approveTitle').value = title;
+                document.getElementById('approveSpeaker').value = speaker;
+                document.getElementById('approveDosen').value = "Belum Diisi";
+                document.getElementById('approveQuota').value = quota_max || 20;
+                document.getElementById('approveModal').style.display = 'block';
+            },
+
+            rejectProposal: function (id) {
+                showConfirm(
+                    'Tolak Proposal?',
+                    'Apakah Anda yakin ingin menolak proposal ini? Pengaju akan menerima notifikasi penolakan.',
+                    async () => {
+                        try {
+                            const formData = new FormData();
+                            formData.append('id', id);
+                            const res = await fetch('php/api_admin_reject_proposal.php', { method: 'POST', body: formData });
+                            const data = await res.json();
+                            if (data.status === 'success') {
+                                showModal('success', 'Proposal Ditolak', data.message);
+                                this.loadSeminars();
+                            } else {
+                                showModal('error', 'Gagal', data.message);
+                            }
+                        } catch (e) {
+                            showModal('error', 'Error', 'Terjadi kesalahan: ' + e.message);
+                        }
+                    }
+                );
+            },
+
+            deleteSeminar: function (id) {
+                showConfirm('Hapus Seminar?', 'Apakah Anda yakin ingin menghapus seminar ini? Tindakan ini tidak dapat dibatalkan.', async () => {
+                    const form = new FormData(); form.append('id', id);
+                    await fetch('php/delete_seminar.php', { method: 'POST', body: form });
+                    showModal('success', 'Terhapus', 'Seminar berhasil dihapus.');
+                    this.loadSeminars();
+                });
+            },
+
+            closeModal: function (id) {
+                const el = document.getElementById(id);
+                if (el) el.style.display = 'none';
+            },
+
+            logout: function () {
+                window.location.href = 'logout.html';
+            }
+        };
+
+        // Listen for Global Errors
+        window.addEventListener('error', function (e) {
+            window.app.log('CRITICAL SCRIPT ERROR: ' + e.message + ' at ' + e.filename + ':' + e.lineno);
+        });
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => window.app.init());
+    </script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

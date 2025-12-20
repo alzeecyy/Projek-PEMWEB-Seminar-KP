@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jelajah - Seminar KP</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .home-header {
+            background: #001E6C;
+            padding: 40px 24px 80px;
+            border-radius: 0 0 50% 50% / 0 0 40px 40px;
+            color: white;
+            text-align: left;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 30px;
+            /* Space for search bar */
+            overflow: hidden;
+        }
+
+        .home-header::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 100px;
+            background: radial-gradient(circle, rgba(66, 133, 244, 0.8) 0%, rgba(0, 30, 108, 0) 70%);
+            filter: blur(20px);
+            z-index: -1;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .user-greeting h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .user-greeting p {
+            font-size: 14px;
+            opacity: 0.8;
+            font-weight: 300;
+        }
+
+        /* Floating Search Bar */
+        .search-container {
+            margin-top: -25px;
+            /* Pull up to overlap */
+            margin-left: 20px;
+            margin-right: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-box {
+            position: relative;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+        }
+
+        .search-icon {
+            color: #6B7280;
+            margin-right: 10px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 0;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            background: transparent;
+        }
+
+        /* Filter Tabs */
+        .filter-section {
+            margin-top: 40px;
+            /* Space from search bar */
+            margin-bottom: 20px;
+            padding: 0 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .filter-chip {
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            background: #9CA3AF;
+            /* Gray default */
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .filter-chip.active {
+            background: #001E6C;
+        }
+
+        /* Lists */
+        .seminar-list {
+            padding: 0 20px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Reusing Card Styles from Home */
+        .seminar-card {
+            background: white;
+            border: 1px solid #094499;
+            border-radius: 20px;
+            padding: 12px;
+            display: flex;
+            gap: 12px;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-status {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: #11ff00;
+            color: #ffffff;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 4px;
+            z-index: 2;
+        }
+
+        .card-status.full {
+            background: #FF0000;
+            color: white;
+        }
+
+        .card-status.completed {
+            background: #2563EB;
+            /* Blue for Selesai */
+            color: white;
+        }
+
+        .card-status.active {
+            background: #11ff00;
+            /* Green for Aktif */
+            color: white;
+        }
+
+        .card-img {
+            width: 100px;
+            height: 140px;
+            background: #eee;
+            border-radius: 12px;
+            overflow: hidden;
+            flex-shrink: 0;
+            margin-top: 10px;
+        }
+
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #001E6C;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            line-height: 1.3;
+        }
+
+        .card-info-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 4px;
+            font-size: 10px;
+            color: #4B5563;
+        }
+
+        .card-info-row .material-icons-round {
+            font-size: 12px;
+            color: #F59E0B;
+        }
+
+        .card-info-row.location .material-icons-round {
+            color: #DC2626;
+        }
+
+        .card-info-row.person .material-icons-round {
+            color: #094499;
+        }
+
+        .quota-bar {
+            height: 4px;
+            background: #E5E7EB;
+            border-radius: 2px;
+            margin: 8px 0;
+            width: 100%;
+        }
+
+        .quota-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3B82F6, #93C5FD);
+            border-radius: 2px;
+        }
+
+        .btn-detail {
+            background: #001E6C;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 6px 0;
+            font-size: 10px;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        /* Custom Bottom Nav Reused */
+        .nav-shape {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 480px;
+            height: 60px;
+            background: #000E35;
+            border-radius: 30px 30px 0 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 40px;
+            align-items: center;
+            pointer-events: auto;
+        }
+
+        .home-fab {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            background: #93C5FD;
+            border-radius: 50%;
+            border: 6px solid #f0f2f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container" style="background: white; padding: 0;">
+
+        <!-- Header -->
+        <header class="home-header">
+
+
+            <div class="user-greeting">
+                <h2>Halo, <span id="userNameDisplay">User</span></h2>
+                <p>Nice to meet you!</p>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        // STRICT LOGIN CHECK
+                        const isLoggedIn = localStorage.getItem('isLoggedIn');
+                        const userName = localStorage.getItem('userName');
+
+                        if (!isLoggedIn || isLoggedIn !== 'true' || !userName) {
+                            showModal('warning', 'Akses Dibatasi', '⛔ Anda belum login!\n\nSilakan login terlebih dahulu untuk mengakses halaman ini.', () => {
+                                window.location.href = 'login.html';
+                            });
+                        }
+
+                        // Update greeting
+                        const firstName = userName.split(' ')[0];
+                        document.getElementById('userNameDisplay').innerText = firstName;
+                    });
+                </script>
+            </div>
+
+        </header>
+
+        <!-- Search Bar Floating -->
+        <div class="search-container">
+            <div class="search-box">
+                <span class="material-icons-round search-icon">search</span>
+                <input type="text" class="search-input">
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filter-section">
+            <button class="filter-chip active" onclick="filterSeminars('all', this)">SEMUA</button>
+            <button class="filter-chip" style="background: #9CA3AF;"
+                onclick="filterSeminars('active', this)">AKTIF</button>
+            <button class="filter-chip" style="background: #9CA3AF;"
+                onclick="filterSeminars('full', this)">PENUH</button>
+            <button class="filter-chip" style="background: #9CA3AF;"
+                onclick="filterSeminars('finished', this)">SELESAI</button>
+        </div>
+
+        <!-- Seminar List -->
+        <div class="seminar-list" id="explore-seminar-container" style="margin-bottom: 80px;">
+            <!-- Content rendered via JS -->
+        </div>
+
+        <!-- Bottom Nav Standard -->
+        <nav class="nav-shape"
+            style="position: fixed; bottom: 0; width: 100%; max-width: 480px; height: 70px; background: #001E6C; border-radius: 30px 30px 0 0; display: flex; justify-content: space-around; align-items: center; padding: 0 10px; z-index: 100;">
+            <a href="home.html" class="nav-item"
+                style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: rgba(255,255,255,0.5);">
+                <span class="material-icons-round" style="font-size: 24px;">home</span>
+                <span style="font-size: 10px; font-weight: 600;">Home</span>
+            </a>
+            <a href="explore.html" class="nav-item-active"
+                style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #93C5FD;">
+                <span class="material-icons-round" style="font-size: 24px;">calendar_today</span>
+                <span style="font-size: 10px; font-weight: 600;">Jadwal</span>
+            </a>
+            <a href="alur.html" class="nav-item"
+                style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: rgba(255,255,255,0.5);">
+                <span class="material-icons-round" style="font-size: 24px;">sync_alt</span>
+                <span style="font-size: 10px; font-weight: 600;">Alur</span>
+            </a>
+            <a href="profile.html" class="nav-item"
+                style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: rgba(255,255,255,0.5);">
+                <span class="material-icons-round" style="font-size: 24px;">person</span>
+                <span style="font-size: 10px; font-weight: 600;">Profile</span>
+            </a>
+        </nav>
+    </div>
+    <script src="js/main.js"></script>
+    <script src="js/seminar-data.js"></script>
+    <script>
+        let currentStatus = 'all';
+        let currentSearch = '';
+
+        // Render all seminars initially
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSeminars('explore-seminar-container', null, 'all');
+
+            // Search Listener
+            const searchInput = document.querySelector('.search-input');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    currentSearch = e.target.value;
+                    renderSeminars('explore-seminar-container', null, currentStatus, currentSearch);
+                });
+            }
+        });
+
+        // Filter Function
+        function filterSeminars(status, element) {
+            currentStatus = status;
+
+            // Update active chip UI
+            // Reset all to gray first
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.classList.remove('active');
+                chip.style.background = '#9CA3AF';
+            });
+
+            // Set active
+            element.classList.add('active');
+            element.style.background = '#001E6C';
+
+            // Render with filter and current search
+            renderSeminars('explore-seminar-container', null, currentStatus, currentSearch);
+        }
+    </script>
+</body>
+
+</html>

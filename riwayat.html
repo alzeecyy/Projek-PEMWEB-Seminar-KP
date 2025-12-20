@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat - Seminar KP</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #000000;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            background: linear-gradient(180deg, #FFFFFF 0%, #F3F4F6 100%);
+            width: 100%;
+            max-width: 480px;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 40px;
+        }
+
+        /* Header */
+        .page-header {
+            background: #001E6C;
+            padding: 40px 20px 60px;
+            text-align: center;
+            border-radius: 0 0 50% 50% / 0 0 40px 40px;
+            position: relative;
+            z-index: 10;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .page-header::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 100px;
+            background: radial-gradient(circle, rgba(66, 133, 244, 0.8) 0%, rgba(0, 30, 108, 0) 70%);
+            filter: blur(20px);
+            z-index: -1;
+        }
+
+        .header-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+
+        .back-link {
+            position: absolute;
+            top: 40px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding: 0 15px;
+            margin-top: -40px;
+            position: relative;
+            z-index: 20;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .stat-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+
+        .stat-icon.blue {
+            background: #EFF6FF;
+            color: #3B82F6;
+        }
+
+        .stat-icon.orange {
+            background: #FFF7ED;
+            color: #F97316;
+        }
+
+        .stat-icon.green {
+            background: #F0FDF4;
+            color: #22C55E;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: #1e293b;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 20% auto;
+            padding: 24px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .btn-upload-list {
+            background: #001E6C;
+            color: white;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-upload-list:hover {
+            background: #0033BD;
+        }
+
+        /* Section Title */
+        .section-title {
+            padding: 24px 20px 12px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #001E6C;
+        }
+
+        /* History List */
+        .history-list {
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .history-item {
+            background: white;
+            padding: 16px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        }
+
+        .history-icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #F1F5F9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            flex-shrink: 0;
+        }
+
+        .history-content {
+            flex: 1;
+        }
+
+        .history-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .history-date {
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        .status-badge {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .status-badge.success {
+            background: #DCFCE7;
+            color: #166534;
+        }
+
+        .status-badge.pending {
+            background: #FEF3C7;
+            color: #D97706;
+        }
+
+        .status-badge.error {
+            background: #FEE2E2;
+            color: #B91C1C;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="page-header">
+            <a href="profile.html" class="back-link">
+                <span class="material-icons-round">arrow_back</span>
+            </a>
+            <div class="header-title">Riwayat Aktivitas</div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <span class="material-icons-round" style="font-size: 20px;">task_alt</span>
+                </div>
+                <div class="stat-value" id="countAttended">0</div>
+                <div class="stat-label">Seminar Diikuti</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <span class="material-icons-round" style="font-size: 20px;">event_repeat</span>
+                </div>
+                <div class="stat-value" id="countRegistered">0</div>
+                <div class="stat-label">Seminar Terdaftar</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <span class="material-icons-round" style="font-size: 20px;">co_present</span>
+                </div>
+                <div class="stat-value" id="countProposed">0</div>
+                <div class="stat-label">Seminar Diajukan</div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="section-title">Aktivitas Terbaru</div>
+        <div class="history-list" id="historyContainer">
+            <div style="text-align:center; padding:20px; color:#64748b; font-size:12px;">Memuat data...</div>
+        </div>
+
+    </div>
+
+    <!-- Upload Modal -->
+    <div id="uploadModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="margin:0; font-size:18px;">Upload Bukti</h3>
+                <span class="material-icons-round" style="cursor:pointer;" onclick="closeModal()">close</span>
+            </div>
+            <form id="uploadForm">
+                <input type="hidden" name="registration_id" id="regId">
+                <div style="margin-bottom:20px;">
+                    <label style="display:block; font-size:13px; color:#64748b; margin-bottom:8px;">Foto Bukti Kehadiran
+                        (JPG/PNG)</label>
+                    <input type="file" name="proof" id="proofFile" accept="image/*" required
+                        style="width:100%; font-size:14px;">
+                </div>
+                <button type="submit" id="btnSubmitUpload"
+                    style="width:100%; background:#001E6C; color:white; border:none; padding:12px; border-radius:12px; font-weight:600;">Kirim
+                    Bukti</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadHistory();
+
+            document.getElementById('uploadForm').onsubmit = async (e) => {
+                e.preventDefault();
+                const btn = document.getElementById('btnSubmitUpload');
+                btn.disabled = true;
+                btn.innerText = 'Mengupload...';
+
+                // Progress-aware upload
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', 'php/api_upload_attendance.php', true);
+
+                xhr.upload.onprogress = (e) => {
+                    if (e.lengthComputable) {
+                        const pct = Math.round((e.loaded / e.total) * 100);
+                        btn.innerText = `Mengupload... ${pct}%`;
+                    }
+                };
+
+                xhr.onload = () => {
+                    try {
+                        const data = JSON.parse(xhr.responseText);
+                        if (data.status === 'success') {
+                            showModal('success', 'Berhasil', data.message);
+                            closeModal();
+                            loadHistory();
+                        } else {
+                            showModal('error', 'Gagal', data.message);
+                        }
+                    } catch (err) {
+                        showModal('error', 'Error', 'Gagal memproses detail: ' + err.message);
+                    }
+                    btn.disabled = false;
+                    btn.innerText = 'Kirim Bukti';
+                };
+
+                xhr.onerror = () => {
+                    showModal('error', 'Koneksi Error', 'Gagal terhubung ke server.');
+                    btn.disabled = false;
+                    btn.innerText = 'Kirim Bukti';
+                };
+
+                xhr.send(formData);
+            };
+        });
+
+        async function loadHistory() {
+            try {
+                const response = await fetch('php/api_history.php');
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    renderHistory(data.data);
+                } else {
+                    document.getElementById('historyContainer').innerHTML = '<div style="text-align:center;">Gagal memuat data.</div>';
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        function openUploadModal(regId) {
+            document.getElementById('regId').value = regId;
+            document.getElementById('uploadModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('uploadModal').style.display = 'none';
+        }
+
+        function renderHistory(items) {
+            const container = document.getElementById('historyContainer');
+            const attEl = document.getElementById('countAttended');
+            const regEl = document.getElementById('countRegistered');
+            const propEl = document.getElementById('countProposed');
+
+            if (items.length === 0) {
+                container.innerHTML = '<div style="text-align:center; padding:20px; color:#64748b; font-size:12px;">Belum ada aktivitas.</div>';
+                attEl.innerText = '0';
+                regEl.innerText = '0';
+                propEl.innerText = '0';
+                return;
+            }
+
+            container.innerHTML = '';
+
+            let attended = 0;
+            let registered = 0;
+            let proposed = 0;
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            items.forEach(item => {
+                const isProposer = (item.type === 'proposer');
+                if (isProposer) {
+                    proposed++;
+                } else {
+                    if (item.status === 'attended') attended++;
+                    else registered++;
+                }
+
+                // Determine badge color
+                let statusClass = 'pending';
+                let statusText = 'Proses';
+                let showUpload = false;
+
+                if (isProposer) {
+                    if (item.status === 'active' || item.status === 'full') {
+                        statusClass = 'success';
+                        statusText = 'Aktif';
+                    } else if (item.status === 'finished') {
+                        statusClass = 'success';
+                        statusText = 'Selesai';
+                    } else if (item.status === 'rejected') {
+                        statusClass = 'error';
+                        statusText = 'Ditolak';
+                    }
+                } else {
+                    // Participant
+                    if (item.status === 'attended') {
+                        statusClass = 'success';
+                        statusText = 'Selesai';
+                    } else if (item.status === 'approved' || item.status === 'attendance_confirmed') {
+                        statusClass = 'success';
+                        statusText = 'Terdaftar';
+
+                        // Logic for upload button: If date passed or today
+                        const itemDate = new Date(item.date);
+                        itemDate.setHours(0, 0, 0, 0);
+                        if (itemDate <= today) {
+                            showUpload = true;
+                        }
+                    } else if (item.status === 'rejected') {
+                        statusClass = 'error';
+                        statusText = 'Ditolak';
+                    } else if (item.status === 'pending_verification') {
+                        statusClass = 'pending';
+                        statusText = 'Verifikasi';
+                    }
+                }
+
+                // Format Date
+                let formattedDate = item.date;
+                try {
+                    const dateParts = item.date.split('-');
+                    const dateObj = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+                    const options = { day: 'numeric', month: 'short', year: 'numeric' };
+                    formattedDate = dateObj.toLocaleDateString('id-ID', options);
+                } catch (e) { }
+
+                const label = isProposer ? 'Penyeminar' : 'Peserta';
+                const icon = isProposer ? 'record_voice_over' : 'event_available';
+                const timeRange = item.time_start && item.time_end ? `${item.time_start.substring(0, 5)} - ${item.time_end.substring(0, 5)}` : '';
+
+                const html = `
+                <div class="history-item">
+                    <div class="history-icon-box">
+                        <span class="material-icons-round">${icon}</span>
+                    </div>
+                    <div class="history-content">
+                        <div class="history-title">${item.title}</div>
+                        <div class="history-date">${formattedDate} ${timeRange ? '• ' + timeRange : ''} • ${label}</div>
+                    </div>
+                    ${showUpload ?
+                        `<button class="btn-upload-list" onclick="openUploadModal(${item.id})">Upload Bukti</button>` :
+                        `<div class="status-badge ${statusClass}">${statusText}</div>`
+                    }
+                </div>
+                `;
+                container.innerHTML += html;
+            });
+
+            attEl.innerText = attended;
+            regEl.innerText = registered;
+            propEl.innerText = proposed;
+        }
+    </script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

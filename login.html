@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Seminar KP</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: var(--font-family);
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: #000000;
+            /* Desktop neutral bg */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        /* Mobile Container Simulation */
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            /* Phone width limit */
+            height: 100vh;
+            background: linear-gradient(180deg, #3B82F6 100%, #FFFFFF 0%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Status Bar Simulation */
+        .status-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            color: #000;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 10;
+        }
+
+        .auth-card {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            border-radius: 30px;
+            padding: 32px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .auth-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 32px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        .form-container {
+            width: 100%;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .label {
+            display: block;
+            font-size: 15px;
+            color: #01178F;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(100, 181, 246, 0.3);
+            border: 1px solid #ffffff;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            color: #000;
+            transition: all 0.2s;
+        }
+
+        .input-field:focus {
+            background: rgba(100, 181, 246, 0.5);
+            border-color: #1A73E8;
+        }
+
+        .btn-submit {
+            width: 140px;
+            padding: 12px;
+            background: #001E6C;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin: 10px auto 16px;
+            display: block;
+            text-align: center;
+            transition: transform 0.1s;
+        }
+
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+
+        .toggle-text {
+            text-align: center;
+            font-size: 13px;
+            color: #002B5B;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .toggle-text:hover {
+            text-decoration: underline;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-container">
+        <!-- Status Bar Mockup -->
+
+
+        <!-- Interface Wrapper -->
+        <!-- Interface Wrapper -->
+        <div class="auth-card">
+
+            <!-- LOGIN VIEW -->
+            <div id="loginView" class="form-container">
+                <h1 class="auth-title">LOGIN</h1>
+                <form id="loginForm">
+                    <input type="hidden" name="action" value="login">
+                    <div class="form-group">
+                        <label class="label">Email</label>
+                        <input type="email" name="email" class="input-field" required placeholder="Masukkan email">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Password</label>
+                        <input type="password" name="password" class="input-field" required
+                            placeholder="Masukkan password">
+                    </div>
+
+                    <button type="submit" class="btn-submit">Login</button>
+
+                    <p class="toggle-text" onclick="showRegister()">
+                        Belum punya akun? Daftar
+                    </p>
+                </form>
+            </div>
+
+            <!-- REGISTER VIEW -->
+            <div id="registerView" class="form-container hidden">
+                <h1 class="auth-title">DAFTAR</h1>
+                <form id="registerForm">
+                    <input type="hidden" name="action" value="register">
+
+                    <div class="form-group">
+                        <label class="label">Nama Lengkap</label>
+                        <input type="text" name="name" class="input-field" required placeholder="Nama Lengkap">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Email</label>
+                        <input type="email" name="email" class="input-field" required placeholder="Email">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Password</label>
+                        <input type="password" name="password" class="input-field" required placeholder="Password">
+                    </div>
+
+                    <button type="submit" class="btn-submit">Daftar</button>
+
+                    <p class="toggle-text" onclick="showLogin()">
+                        Sudah punya akun? Login
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="js/main.js"></script>
+    <script>
+        // Check URL for #register
+        if (window.location.hash === '#register') {
+            showRegister();
+        }
+
+        // Toggle Views
+        function showRegister() {
+            document.getElementById('loginView').classList.add('hidden');
+            document.getElementById('registerView').classList.remove('hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('registerView').classList.add('hidden');
+            document.getElementById('loginView').classList.remove('hidden');
+        }
+
+        // Handle Login
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            toggleLoading(true);
+
+            const formData = new FormData(this);
+
+            fetch('php/auth.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error('Server error: ' + res.status);
+                    }
+                    return res.text();
+                })
+                .then(text => {
+                    console.log('Raw response:', text);
+                    const data = JSON.parse(text);
+                    toggleLoading(false);
+
+                    if (data.status === 'success') {
+                        // Clear any old data
+                        localStorage.clear();
+                        // Set new login data
+                        localStorage.setItem('isLoggedIn', 'true');
+                        localStorage.setItem('userName', data.name);
+                        localStorage.setItem('userEmail', data.email);
+                        showModal("success", "Login Berhasil!", "Selamat datang, " + data.name + "! \nAnda akan diarahkan ke halaman utama.", () => {
+                            window.location.href = data.redirect;
+                        });
+
+                    } else {
+                        showModal("error", "Login Gagal", data.message);
+                    }
+                })
+                .catch(err => {
+                    toggleLoading(false);
+                    console.error('Error:', err);
+                    showModal("error", "Koneksi Error", "Tidak bisa terhubung ke server!\n\n" + err.message + "\n\nPastikan:\n• Apache sedang running\n• Akses via localhost");
+                });
+        });
+
+        // Handle Register
+        document.getElementById('registerForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            toggleLoading(true);
+
+            const formData = new FormData(this);
+
+            fetch('php/auth.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error('Server error: ' + res.status);
+                    }
+                    return res.text();
+                })
+                .then(text => {
+                    console.log('Raw response:', text);
+                    const data = JSON.parse(text);
+                    toggleLoading(false);
+
+                    if (data.status === 'success') {
+                        showModal("success", "Registrasi Berhasil!", "Akun Anda sudah dibuat!\nSilakan login dengan email dan password yang baru saja didaftarkan.", () => {
+                            showLogin();
+                            // Auto-fill email if possible
+                            const email = formData.get('email');
+                            document.querySelector('#loginForm input[name="email"]').value = email;
+                        });
+                    } else {
+                        showModal("error", "Registrasi Gagal", data.message);
+                    }
+                })
+                .catch(err => {
+                    toggleLoading(false);
+                    console.error('Error:', err);
+                    showModal("error", "Koneksi Error", "Tidak bisa terhubung ke server!\n\n" + err.message);
+                });
+        });
+    </script>
+</body>
+
+</html>
