@@ -307,6 +307,7 @@
             margin-bottom: 2px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
+            line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
             white-space: normal;
@@ -366,11 +367,75 @@
 
         .modal-content {
             background-color: white;
-            margin: 40% auto;
+            margin: 30% auto;
+            padding: 30px;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 420px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-label {
+            display: block;
+            font-size: 13px;
+            color: #1e293b;
+            font-weight: 800;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .file-input-container {
+            position: relative;
+            background: #F8FAFC;
+            border: 2px dashed #CBD5E1;
+            border-radius: 16px;
             padding: 24px;
-            border-radius: 20px;
-            width: 85%;
-            max-width: 400px;
+            text-align: center;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .file-input-container:hover {
+            border-color: #001E6C;
+            background: #EFF6FF;
+        }
+
+        .file-input-container input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-msg {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .file-icon {
+            font-size: 32px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            display: block;
         }
     </style>
 </head>
@@ -465,14 +530,17 @@
             </div>
             <form id="uploadForm">
                 <input type="hidden" name="registration_id" id="regId">
-                <div style="margin-bottom:20px;">
-                    <label style="display:block; font-size:13px; color:#64748b; margin-bottom:8px;">Foto Bukti Kehadiran
-                        (JPG/PNG)</label>
-                    <input type="file" name="proof" id="proofFile" accept="image/*" required
-                        style="width:100%; font-size:14px;">
+                <div style="margin-bottom:24px;">
+                    <label class="modal-label">Bukti Kehadiran (JPG/PNG)</label>
+                    <div class="file-input-container" id="dropZone">
+                        <span class="material-icons-round file-icon">cloud_upload</span>
+                        <span class="file-msg" id="fileNameDisplay">Pilih foto atau tarik ke sini</span>
+                        <input type="file" name="proof" id="proofFile" accept="image/*" required
+                            onchange="updateFileName(this)">
+                    </div>
                 </div>
                 <button type="submit" id="btnSubmitUpload"
-                    style="width:100%; background:#001E6C; color:white; border:none; padding:12px; border-radius:12px; font-weight:600;">Kirim
+                    style="width:100%; background:#001E6C; color:white; border:none; padding:14px; border-radius:12px; font-weight:700; font-size:15px; cursor:pointer; box-shadow: 0 4px 15px rgba(0,30,108,0.2); text-transform:uppercase; letter-spacing:1px;">Kirim
                     Bukti</button>
             </form>
         </div>
@@ -567,6 +635,17 @@
                     window.location.href = 'login.html';
                 });
             });
+        }
+
+        function updateFileName(input) {
+            const display = document.getElementById('fileNameDisplay');
+            if (input.files && input.files[0]) {
+                display.textContent = input.files[0].name;
+                display.style.color = '#001E6C';
+            } else {
+                display.textContent = 'Pilih foto atau tarik ke sini';
+                display.style.color = '#64748b';
+            }
         }
 
         // History & Upload Logic
@@ -702,6 +781,8 @@
                 const btn = document.getElementById('btnSubmitUpload');
                 btn.disabled = true;
                 btn.innerText = 'Mengupload...';
+
+                const formData = new FormData(uploadForm);
 
                 // Progress-aware upload
                 const xhr = new XMLHttpRequest();
