@@ -25,24 +25,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    $image = 'assets/default_seminar.jpg'; // Default
-
     // Handle Image Upload (Optional)
+    $imageUpdate = "";
+    $params = [$title, $speaker, $date, $time_start, $time_end, $location, $dosen, $quota_max];
+    $types = "sssssssi";
+
     if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
         $targetDir = "../uploads/seminars/";
+        if (!file_exists($targetDir)) mkdir($targetDir, 0777, true);
+        
         $fileName = time() . '_' . basename($_FILES["image"]["name"]);
         $targetFile = $targetDir . $fileName;
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
-            $image = "uploads/seminars/" . $fileName;
+            $imagePath = "uploads/seminars/" . $fileName;
+            $imageUpdate = ", image = ?";
+            $params[] = $imagePath;
+            $types .= "s";
         }
     }
+
+    $params[] = $id;
+    $types .= "i";
 
     $conn->begin_transaction();
 
     try {
-        $sql = "UPDATE seminars SET title = ?, speaker = ?, date = ?, time_start = ?, time_end = ?, location = ?, dosen = ?, quota_max = ?, image = ?, status = 'active' WHERE id = ?";
+        $sql = "UPDATE seminars SET title = ?, speaker = ?, date = ?, time_start = ?, time_end = ?, location = ?, dosen = ?, quota_max = ?, status = 'active' $imageUpdate WHERE id = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sssssssisi", $title, $speaker, $date, $time_start, $time_end, $location, $dosen, $quota_max, $image, $id);
+        $stmt->bind_param($types, ...$params);
         $stmt->execute();
         $stmt->close();
 
