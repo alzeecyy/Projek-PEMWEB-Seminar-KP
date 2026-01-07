@@ -123,7 +123,7 @@ async function renderSeminars(containerId, limit = null, filterStatus = 'all', s
             <div class="seminar-card">
                 <span class="card-status ${seminar.statusClass}">${seminar.statusText}</span>
                 <div class="card-img">
-                    <img src="${seminar.image}" alt="Person" onerror="this.src='https://via.placeholder.com/100x140'">
+                    <img src="${seminar.image}" alt="Person" onerror="this.src='assets/default_seminar.jpg'">
                 </div>
                 <div class="card-content">
                     <h3 class="card-title">${seminar.title}</h3>
