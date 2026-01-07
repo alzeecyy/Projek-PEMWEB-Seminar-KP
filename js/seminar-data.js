@@ -75,7 +75,7 @@ async function renderSeminars(containerId, limit = null, filterStatus = 'all', s
         if (seminarEnd < now) {
             statusText = 'SELESAI';
             statusClass = 'completed';
-        } else if (seminar.quotaCurrent >= seminar.quotaMax) {
+        } else if (Number(seminar.quotaCurrent) >= Number(seminar.quotaMax)) {
             statusText = 'PENUH';
             statusClass = 'full';
         } else {

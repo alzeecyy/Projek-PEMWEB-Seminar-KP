@@ -664,7 +664,7 @@
 
             let status = 'OPEN';
             if (seminarEnd < now) status = 'FINISHED';
-            if (seminar.quotaCurrent >= seminar.quotaMax) status = 'FULL';
+            if (Number(seminar.quotaCurrent) >= Number(seminar.quotaMax)) status = 'FULL';
 
             // Update Button State
             const regBtn = document.querySelector('.action-btn');
