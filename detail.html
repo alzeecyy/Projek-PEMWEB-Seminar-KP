@@ -568,7 +568,7 @@
 
 
     <script src="js/main.js"></script>
-    <script src="js/seminar-data.js"></script> <!-- Load shared data -->
+    <script src="js/seminar-data.js?v=1.1"></script> <!-- Load shared data -->
     <script>
         // Check login status on load & Load Seminar ID
         window.addEventListener('DOMContentLoaded', () => {
@@ -662,9 +662,12 @@
                 seminarEnd.setHours(23, 59, 59);
             }
 
+            const qCurr = parseInt(seminar.quotaCurrent) || 0;
+            const qMax = parseInt(seminar.quotaMax) || 0;
+
             let status = 'OPEN';
             if (seminarEnd < now) status = 'FINISHED';
-            if (Number(seminar.quotaCurrent) >= Number(seminar.quotaMax)) status = 'FULL';
+            if (qCurr >= qMax && qMax > 0) status = 'FULL';
 
             // Update Button State
             const regBtn = document.querySelector('.action-btn');

@@ -72,10 +72,13 @@ async function renderSeminars(containerId, limit = null, filterStatus = 'all', s
             seminarEnd.setHours(23, 59, 59);
         }
 
+        const qCurr = parseInt(seminar.quotaCurrent) || 0;
+        const qMax = parseInt(seminar.quotaMax) || 0;
+
         if (seminarEnd < now) {
             statusText = 'SELESAI';
             statusClass = 'completed';
-        } else if (Number(seminar.quotaCurrent) >= Number(seminar.quotaMax)) {
+        } else if (qCurr >= qMax && qMax > 0) {
             statusText = 'PENUH';
             statusClass = 'full';
         } else {
